@@ -1,1 +1,65 @@
+# Verilen input'u cok katmanlı listelerden çıkarıp tek boyutlu bir listeye dönüştürmek amacımız
+# Ornek input olarak =  [[1,'a',['cat'],2],[[[3]],'dog'],4,5]
+# Beklenilen sonuc   =  [1,'a','cat',2,3,'dog',4,5]
 
+### Kod
+
+def flatten(x):       # verilen veriyi katmanlarından tek boyuta geçiren fonksyon
+    last_value = []
+    l    = []
+    note = []
+    ct =0
+    control = True
+    status  = False
+    
+    
+    x = inpt[0]
+    flat_s =[]
+    for c in x:
+        if c == ",":
+            continue
+        flat_s.append(c)
+
+    for i in range(len(flat_s)):
+        e=flat_s[i]
+        if e =="[" or e== "]":
+            continue
+        elif (e== "'" or e== '"') and control:
+            control = False
+            status  = True
+            continue
+        elif (e== "'" or e== '"') and control== False:
+            control = True
+            status  = False
+            last_value.append("".join(l))
+
+            try:
+                int("".join(l))
+                note.append(ct)
+            except ValueError:
+                pass
+            l=[]
+            ct+=1
+            continue
+        if status:
+            l.append(e)
+        else:
+            last_value.append(e)
+            ct+=1
+    for i in range(len(last_value)):
+
+        try:
+            last_value[i]=int(last_value[i])
+        except ValueError:
+            pass
+
+    for e in note:
+        last_value[e]=str(last_value[e])
+        
+    return last_value
+    
+    
+# Ana gövde
+
+inpt=list(input().split())
+print(flatten(inpt))
